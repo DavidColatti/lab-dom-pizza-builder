@@ -63,30 +63,60 @@ function renderGreenPeppers() {
 }
 
 function renderWhiteSauce() {
-  if (state.whiteSauce) {
-    document.querySelector('.sauce-white').style.visibility = 'hidden';
+  let sauce = document.querySelector('.sauce')
+  if(state.whiteSauce) {
+    sauce.className = 'sauce'
   } else {
-    document.querySelector('.sauce-white').style.visibility = 'visible'
+    sauce.className = 'sauce sauce-white'
   }
 };
 
 function renderGlutenFreeCrust() {
-  if (state.glutenFreeCrust) {
-    document.querySelector('.crust-gluten-free').style.visibility = 'hidden';
+  let crust = document.querySelector('.crust')
+  if(state.glutenFreeCrust) {
+    crust.className = 'crust'
   } else {
-    document.querySelector('.crust-gluten-free').style.visibility = 'visible'
+    crust.className = 'crust crust-gluten-free'
   }
 }
 
 function renderButtons() {
   // Iteration 3: add/remove the class "active" of each `<button class="btn">`
-  
-  //document.querySelectorAll('.active')[i].classList.remove('active')
-  }
-
+  document.querySelectorAll('.btn').forEach(btn => {
+    btn.onclick = function (e) {
+      if (e.target.className.includes('active')) {
+        e.target.className = e.target.className.replace('active', '')
+      } else {
+        e.target.className += 'active'
+      }
+    }
+  })
+}
 
 function renderPrice() {
   // Iteration 4: change the HTML of `<aside class="panel price">`
+  
+  let menu = ''
+  let total = basePrice;
+
+  for (let food in state) {
+    if (state[food]) {
+      total += ingredients[food].price
+      menu += `<li>$${ingredients[food].price} ${ingredients[food].name}</li>`
+    }
+  }
+
+  
+  let newPricesHTML = `
+  <h2>Your pizza's price</h2>
+
+  <b>$10 cheese pizza</b>
+  <ul>
+  ${menu}
+  </ul>
+  <strong>$${total}</strong>`
+
+  document.querySelector('.panel.price').innerHTML = newPricesHTML
 }
 
 renderEverything();
